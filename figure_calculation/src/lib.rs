@@ -10,7 +10,7 @@ pub mod area_calculation {
     use std::f32::consts::PI;
     
 
-    pub fn square_calculation(figure: Figure) -> f32 {
+    pub fn area_calculation(figure: Figure) -> f32 {
         match figure {
             Figure::Quadrate(side) => side * side,
             Figure::Circle(radius) => f32::powf(radius, 2f32) * PI,
@@ -27,9 +27,27 @@ pub mod area_calculation {
 
 #[cfg(test)]
 mod tests {
+    use crate::area_calculation::area_calculation;
+    use crate::Figure;
+
     #[test]
-    fn it_works() {
-        let result = 2 + 2;
-        assert_eq!(result, 4);
+    fn quadrate_area_calculation() {
+        assert_eq!(area_calculation(Figure::Quadrate(2f32)), 4f32);
+        assert_ne!(area_calculation(Figure::Quadrate(2f32)), 0f32)
+    }
+
+    #[test]
+    fn circle_area_calculation() {
+        assert_eq!(area_calculation(Figure::Circle(5f32)), 78.53982);
+    }
+
+    #[test]
+    fn rectangle_area_calculation() {
+        assert_eq!(area_calculation(Figure::Rectangle(3f32, 4f32)), 12f32);
+    }
+
+    #[test]
+    fn triangle_area_calculation() {
+        assert_eq!(area_calculation(Figure::Triangle(3f32, 4f32, 5f32)), 6f32);
     }
 }

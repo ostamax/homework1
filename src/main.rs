@@ -1,4 +1,4 @@
-use figure_calculation::area_calculation::square_calculation;
+use figure_calculation::area_calculation::area_calculation;
 use figure_calculation::Figure;
 
 fn main() {
@@ -56,7 +56,7 @@ fn main() {
             "Supported figures are: Circle, Quadrate, Rectangle and Triangle!",
         )),
     };
-    println!("{}: {:?}", subcommand, square_calculation(figure));
+    println!("{}: {:?}", subcommand, area_calculation(figure));
 }
 
 fn print_message_and_exit(message: String) -> Figure {
