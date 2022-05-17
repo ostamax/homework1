@@ -1,53 +1,55 @@
-pub enum Figure {
-    Circle(f32),             // radius of a circle
-    Quadrate(f32),           // one side of a quadrate
-    Rectangle(f32, f32),     // sides of a rectangle
-    Triangle(f32, f32, f32), // sides of a triangle
+pub enum Figures<T> {
+    Circle(T),         // radius of a circle
+    Quadrate(T),       // one side of a quadrate
+    Rectangle(T, T),   // sides of a rectangle
+    Triangle(T, T, T), // sides of a triangle
+    Sphere(T),         // radius of a sphere
+    Cube(T),           // one side of a cube
+    Cylinder(T, T),    // radius of a cylinder's base and haight
+    Cuboid(T, T, T),   // edges of a cuboid
 }
 
 pub mod area_calculation {
-    use crate::Figure;
-    use std::f32::consts::PI;
-    
-
-    pub fn area_calculation(figure: Figure) -> f32 {
-        match figure {
-            Figure::Quadrate(side) => side * side,
-            Figure::Circle(radius) => f32::powf(radius, 2f32) * PI,
-            Figure::Rectangle(side_one, side_two) => side_one * side_two,
-            Figure::Triangle(side_one, side_two, side_three) => ((side_one + side_two + side_three)
-                / 2f32
-                * ((side_one + side_two + side_three) / 2f32 - side_one)
-                * ((side_one + side_two + side_three) / 2f32 - side_two)
-                * ((side_one + side_two + side_three) / 2f32 - side_three))
-                .sqrt(),
+    use crate::Figures;
+    use std::f64::consts::PI;
+    pub fn area_calculation<T>(figure: &Figures<T>) -> f64
+    where
+        T: Clone + Into<f64> + Copy,
+    {
+        match *figure {
+            Figures::Circle(circle_radius) => f64::powf(circle_radius.into(), 2f64) * PI,
+            Figures::Quadrate(side) => f64::powf(side.into(), 2f64),
+            Figures::Rectangle(side_one, side_two) => side_one.into() * side_two.into(),
+            Figures::Triangle(side_one, side_two, side_three) => {
+                let semi_perimeter = (side_one.into() + side_two.into() + side_three.into()) / 2f64;
+                (semi_perimeter
+                    * (semi_perimeter - side_one.into())
+                    * (semi_perimeter - side_two.into())
+                    * (semi_perimeter - side_three.into()))
+                .sqrt()
+            }
+            _ => 0.0,
         }
     }
 }
 
-#[cfg(test)]
-mod tests {
-    use crate::area_calculation::area_calculation;
-    use crate::Figure;
-
-    #[test]
-    fn quadrate_area_calculation() {
-        assert_eq!(area_calculation(Figure::Quadrate(2f32)), 4f32);
-        assert_ne!(area_calculation(Figure::Quadrate(2f32)), 0f32)
-    }
-
-    #[test]
-    fn circle_area_calculation() {
-        assert_eq!(area_calculation(Figure::Circle(5f32)), 78.53982);
-    }
-
-    #[test]
-    fn rectangle_area_calculation() {
-        assert_eq!(area_calculation(Figure::Rectangle(3f32, 4f32)), 12f32);
-    }
-
-    #[test]
-    fn triangle_area_calculation() {
-        assert_eq!(area_calculation(Figure::Triangle(3f32, 4f32, 5f32)), 6f32);
+pub mod volume_calculation {
+    use crate::Figures;
+    use std::f64::consts::PI;
+    pub fn volume_calculation<T>(figure: &Figures<T>) -> f64
+    where
+        T: Into<f64> + Copy,
+    {
+        match *figure {
+            Figures::Sphere(sphere_radius) => {
+                4f64 / 3f64 * PI * f64::powf(sphere_radius.into(), 3f64)
+            }
+            Figures::Cube(edge) => f64::powf(edge.into(), 3f64),
+            Figures::Cylinder(radius, height) => {
+                PI * f64::powf(radius.into(), 2f64) * height.into()
+            }
+            Figures::Cuboid(e1, e2, e3) => e1.into() * e2.into() * e3.into(),
+            _ => 0.0,
+        }
     }
 }
