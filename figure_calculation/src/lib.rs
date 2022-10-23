@@ -28,7 +28,16 @@ pub mod area_calculation {
                     * (semi_perimeter - side_three.into()))
                 .sqrt()
             }
-            _ => 0.0,
+            Figures::Sphere(sphere_radius) => 4f64 * PI * f64::powf(sphere_radius.into(), 2f64),
+            Figures::Cube(edge) => 6f64 * f64::powf(edge.into(), 2f64),
+            Figures::Cylinder(radius, height) => {
+                2f64 * PI * radius.into() * (height.into() + radius.into())
+            }
+            Figures::Cuboid(edge1, edge2, edge3) => {
+                2f64 * (edge1.into() * edge2.into()
+                    + edge1.into() * edge3.into()
+                    + edge2.into() * edge3.into())
+            }
         }
     }
 }
